@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Leaflet CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <style>
+            /* Specify the dimensions of the map container */
+            #open_source_map {
+                height: 300px;
+                width: 300px;
+            }
+        </style>
+
+    <title>Sea level rise simulator</title>
+    <style>
+        /* Center the form horizontally */
+        form {
+         text-align: center;
+        }
+        
+        /* Style the input fields */
+        input[type="text"] {
+            max-width: 256px;
+            height: 25px;
+            margin-bottom: 10px; /* Add some bottom margin for spacing */
+        }
+        
+        /* Style the Next button */
+        button[type="submit"] {
+            margin-top: 15px; /* Add top margin for spacing */
+            margin-bottom: 15px;
+            height: 25px;
+            width: 120px;
+            background: #d3d3d3;
+            opacity: 0.7;
+            border: 2px solid #04AA6D;;
+        }
+
+        .button:hover {
+            opacity: 1;
+        }
+
+        /* Style the drop-down menu */
+        #zoom {
+            background: #d3d3d3;
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+        
+        #zoom:hover {
+            opacity: 1;
+        }
+
+        /* Set the background image */
+        body {
+            position: relative; /* Ensure the body can be used as a reference for absolute positioning */
+            background-image: url('/static/images/background.jpg'); /* Adjust the path as needed */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* This keeps the background image fixed while scrolling */
+            /* Ensure content is readable on top of the background */
+            color: #ffffff; /* white text color */
+            /* Center the text vertically and horizontally */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Set the body height to full viewport height */
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        /* Overlay div for faded effect */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 200%;
+            background-color: rgba(61, 59, 59, 0.7); /* Adjust the opacity value (0.3 in this case) as needed */
+            z-index: -1; /* Ensure the overlay is behind the content */
+        }
+        
+        /* Container for the text and form */
+        .container {
+            text-align: center;
+            align-items: center; /* Center the content */
+            z-index: 1;
+            display: flex;
+            margin: auto /* Ensure the content is above the overlay */
+        }
+        .left-panel {
+            flex: 1; /* Take up remaining space */
+            padding: 20px; /* Adjust as needed */
+            margin:auto;
+        }
+
+        .right-panel {
+            width: 400px; /* Adjust as needed */
+            padding: 20px; /* Adjust as needed */
+        }
+        /* Slider styles */
+        .slidecontainer {
+            width: 50%;
+            margin: 0 auto;
+        }
+        
+        .slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 25px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+        
+        .slider:hover {
+            opacity: 1;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            background: #04AA6D;
+            cursor: pointer;
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            background: #04AA6D;
+            cursor: pointer;
+        }
+
+        .open_source_map {
+            height: 400px;
+            width: 100%;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Overlay div for faded effect -->
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="left-panel">
+    <h1>Sea Level Rise Simulator</h1>
+    <p>Choose coordinates within the bounds of Finland by right-clicking the map or input manually.
+        <br>Choose zooming level from dropdown menu.
+        <br>Drag the slider to the year you want to display.
+        <br>Press "Update Map" everytime you want the map to update.</p>
+
+    <div class ="coordinates">
+        <input type="text" class="form-control" id="latitude" name="latitude" placeholder="Latitude">
+        <input type="text" class="form-control" id="longitude" name="longitude" placeholder="Longitude">
+        <br>
+        <label for="zoom">Choose zooming level:</label>
+            <select id="zoom" name="zoom">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+</select>
+<br>
+    </div>
+
+    <div class="slidecontainer">
+        <input type="range" min="2024" max="2300" value="2024" class="slider" id="myRange">
+        <p>Year: <span id="year"></span></p>
+    </div>
+
+    <div> 
+        <button type="submit" class="button" id="button", onclick="saveUserData()">Update Map</button>
+    </div>
+
+
+    <div class="open_source_map" id="open_source_map">
+    </div>
+    </div>
+    <div class="right-panel">  
+    <div class="matplotlib_map" id="map">
+        <img id="mapimg">
+    </div>
+    </div> 
+</div>
+
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    var map = L.map('open_source_map').setView([62, 24], 5);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Add right-click event listener to the map
+    map.on('contextmenu', function(event) {
+        // Retrieve the clicked coordinates
+        var lat = event.latlng.lat;
+        var lng = event.latlng.lng;
+
+        // Set the values of the Latitude and Longitude text fields
+        latitude.value = lat;
+        longitude.value = lng;
+    });
+
+// Javascript scripts for sending data to backend
+// Identify slider objects
+var slider = document.getElementById('myRange')
+var output = document.getElementById('year');
+
+// Function that runs everytime the button is pushed
+function saveUserData() {
+    // Get the coordinate values from user input
+    var lat_value = document.getElementById('latitude').value;
+    var long_value = document.getElementById('longitude').value;
+
+    // Validate coordinates
+    if (lat_value == '' || long_value == '') {
+        alert('Please enter both latitude and longitude.');
+        return;
+    }
+
+    // Convert coordinates to floats
+    var latitude = parseFloat(lat_value);
+    var longitude = parseFloat(long_value);
+
+    // Check if coordinates are within Finland bounds or are 0.0 and 0.0
+    if ((latitude < 59.5 || latitude > 70.1 || longitude < 19.0 || longitude > 31.6) || (latitude == 0.0 && longitude == 0.0)) {
+        alert('Please enter valid coordinates within the bounds of Finland.');
+        return;
+    }
+
+    var year_value = document.getElementById("myRange").value;
+    var zoom_value = document.getElementById("zoom").value;
+
+    // Save as a dictionary
+    var coordinatesToSend = {
+        'latitude': lat_value,
+        'longitude': long_value,
+        'myRange': year_value,
+        'zoom': zoom_value
+    };
+
+   // Send coordinates to backend 
+    fetch('/map', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(coordinatesToSend)
+    })
+    // Save the data that was received as a response
+    .then((response) => response.json())
+    .then(data => {
+        // Display the received data in the frontend HTML
+        // This shows the first image, but does not update it when new coordinates are put in
+        var imgurl = data.image_url;
+        document.getElementById('mapimg').src = imgurl;
+    });
+}
+
+// Slider function
+output.innerHTML = slider.value;
+slider.oninput = function() {
+    output.innerHTML = this.value;
+}
+</script>
+
+</body>
+</html>

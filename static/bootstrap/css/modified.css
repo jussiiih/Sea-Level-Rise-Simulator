@@ -1,0 +1,59 @@
+
+
+/* Center the form horizontally  */
+form {
+    text-align: center;
+}
+
+/* Style the input fields */
+input[type="text"] {
+    max-width: 256px;
+    margin-bottom: 10px; /* Add some bottom margin for spacing */
+}
+
+/* Style the Next button */
+button[type="submit"] {
+    margin-top: 20px; /* Add top margin for spacing */
+}
+
+/* Set the background image */
+body {
+    background-image: url('/static/images/background2.jpg'); /* Adjust the path as needed */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* This keeps the background image fixed while scrolling */
+    /* Ensure content is readable on top of the background */
+    color: #ffffff; /* white text color */
+}
+
+/* Overlay div for faded effect */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3); /* Adjust the opacity value (0.3 in this case) as needed */
+    z-index: -1; /* Ensure the overlay is behind the content */
+}
+
+/* Container for the text and form */
+.container {
+    text-align: center; /* Center the content */
+}
+
+/* Container for the text */
+.text-container {
+    /* Remove background-color property */
+    padding: 20px 0; /* Add padding above and below the text */
+    border-radius: 5px; /* Optional: Add rounded corners to the background */
+}
+
+/* Container for the form */
+.form-container {
+    background-color: rgba(0, 0, 0, 0.3); /* Adjust the opacity and color as needed */
+    padding: 20px; /* Add padding to create space around the form elements */
+    border-radius: 5px; /* Optional: Add rounded corners to the background */
+    margin-top: 20px; /* Add space between the text and the form */
+    display: inline-block; /* Make the container inline-block */
+}

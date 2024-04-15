@@ -1,0 +1,30 @@
+/* Set the background color to deep blue */
+body {
+    background-color: #001f3f; /* Deep blue color */
+    color: #ffffff; /* White text color */
+    padding: 20px; /* Add padding to the body */
+}
+
+/* Center the text horizontally and vertically */
+h1 {
+    text-align: center; /* Center the text horizontally */
+    margin-top: 50px; /* Add margin to center vertically */
+}
+
+/* Style for the Back button */
+.btn-back {
+    background-color: #ffffff; /* Blue color for the button */
+    color: #0a0808; /* White text color */
+    padding: 10px 20px; /* Add padding to the button */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Add border radius */
+    cursor: pointer; /* Add pointer cursor on hover */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Make the button inline-block */
+    margin-top: 20px; /* Add top margin for spacing */
+}
+
+/* Center the Back button horizontally */
+.btn-container {
+    text-align: center;
+}
