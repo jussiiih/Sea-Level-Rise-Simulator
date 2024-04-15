@@ -1,1 +1,1 @@
-# sea-level-rise-simulator
+Graduation project for Team Gamma
