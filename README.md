@@ -1,6 +1,6 @@
 # Sea Level Rise Simulator
 
-# In Finnish
+## In Finnish
 Tämä repositorio sisältää AW Academyn valmistujaisprojektin tiedostot. Projekti tehtiin neljän hengen ryhmätyönä. Projektin tuotteena tehtiin simulaattori, joka koneoppimisen avaulla kehitellyllä mallilla ennustaa meriveden pinnannousua Suomessa, ja piirtää halutusta vuodesta kartan Matplotlibillä. Lopullinen tuote on julkisena hetken osoitteessa [https://gammaproject.azurewebsites.net/](https://gammaproject.azurewebsites.net/), se todennäköisesti otetaan jossain kohtaa pois käytöstä lähitulevaisuudessa. Ohjemlmaa voi käyttää kuitenkin paikallisesti suorittamalla tiedostoa app.py. Sitä ennen tiedostoon get_elevations_in_finlad.py on lisättävä Maanmittauslaitoksen API-avain, jotta ohjelma toimii. Tässä README-tiedostossa alempana liitteinä on projektin esittelydiat, ohjelman aloitusnäkymä sekä ohjelmalla piirrettyjä karttoja samasta paikasta.
 
 ## In English
